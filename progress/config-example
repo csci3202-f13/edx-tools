@@ -1,0 +1,16 @@
+# Config info for edx-dump etc
+
+# Log in to edge.edX and use something like google chrome debugger (cntl-shift-i) to dump an active cookies that will let you in.
+# Here are parts of a few of them as an example of the syntax.
+cookie="AWSELB=....; current_player_mode=html5; ...... NRAGENT=tk=..."
+
+# Specify bits of the the URL that you use to get to the course as an Instructor
+courseserver=https://edge.edx.org/courses
+coursepath=BerkeleyX/CS188x-17
+
+# Get student/user info from the Instructor tab, "Dump list of enrolled students"
+userids="5020 5519"
+users="nealmcb example2"
+
+# Get problem ids by looking at urls used during an edX instructor session, or by dumping course from Studio, untaring, and looking in "problem" directory.  Strip off the ".xml" suffix.
+problems="002e1a2e855c40e7a1e60e2728b7edc5 00934ba6b2704a26975f3023030592f2"

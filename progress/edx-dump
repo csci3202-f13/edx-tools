@@ -1,0 +1,26 @@
+# Gather data on student progress by scraping edX course site as an instructor
+
+# TODO: add options and code to choose which data to get.  Currently just gets progress report, but could get detailed submission history
+
+ts=$(date "+%Y%m%dT%H%M%S")
+
+# Read in local course-specific values for $courseserver, $coursepath, $cookie, $users, $problems etc
+. ~/config/edx-tools/config
+
+# Gather latest progress reports for each userid
+for userid in $userids; do
+    echo progress for userid: $userid
+    curl -s --cookie "$cookie" progress page: $courseserver/$coursepath/progress/$userid/ > progress/$userid.$ts.html
+done
+
+# Note: need to add command-line arguments and option testing here (or just change false to true....)
+# Get detailed submission history and results for each user for given problems
+if /bin/false; then
+  for problem in $problems; do
+    mkdir -p $problem
+    for username in $users; do
+      echo problem: $problem user: $username
+      curl -s --cookie "$cookie" $courseserver/$coursepath/submission_history/$username/i4x://$coursepath/problem/$problem > $problem/$username.$ts.html
+    done
+  done
+fi
