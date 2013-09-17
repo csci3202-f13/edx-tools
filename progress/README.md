@@ -2,7 +2,10 @@
 
 Requirements
 
-This was developed on Ubuntu Precise 12.04, with ipython 0.13 from backports.
+This was developed on Ubuntu Precise 12.04
+Install these packages:
+  ipython 0.13 (from backports)
+  python-simplejson package
 
 Usage
 

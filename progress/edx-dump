@@ -1,8 +1,13 @@
 # Gather data on student progress by scraping edX course site as an instructor
 
 # TODO:
-#  add options and code to choose which data to get.  Currently just gets progress report, but could get detailed submission history
-#  login via password and get our own cookies
+#  Add options for setting $do_progress and $do_detail.  Currently just gets progress report, but could get detailed submission history
+#  Login via password and get our own cookies
+#  Add test cases
+
+# Default is to just get the progress reports
+do_progress=${do_progress:-"yes"}
+do_detail=${do_detail:-"no"}
 
 ts=$(date "+%Y%m%dT%H%M%S")
 
@@ -12,14 +17,18 @@ config=~/config/edx-tools/config
 
 # Gather latest progress reports for each userid, via urls like:
 #  https://edge.edx.org/courses/BerkeleyX/CS188x-17/2013_T3/progress/5020/
-for userid in $userids; do
-    echo progress for userid: $userid
-    curl -s --cookie "$cookie" $courseserver/$coursepath/progress/$userid/ > progress/$userid.$ts.html
-done
+if [ "$do_progress" = "yes" ]; then
+    mkdir -p progress
+
+    for userid in $userids; do
+        echo progress for userid: $userid
+	curl -s --cookie "$cookie" $courseserver/$coursepath/progress/$userid/ > progress/$userid.$ts.html
+    done
+fi
 
 # Note: need to add command-line arguments and option testing here (or just change false to true....)
 # Get detailed submission history and results for each user for given problems
-if /bin/false; then
+if [ "$do_detail" = "yes" ]; then
   for problem in $problems; do
     mkdir -p $problem
     for username in $users; do
