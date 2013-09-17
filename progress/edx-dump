@@ -1,16 +1,20 @@
 # Gather data on student progress by scraping edX course site as an instructor
 
-# TODO: add options and code to choose which data to get.  Currently just gets progress report, but could get detailed submission history
+# TODO:
+#  add options and code to choose which data to get.  Currently just gets progress report, but could get detailed submission history
+#  login via password and get our own cookies
 
 ts=$(date "+%Y%m%dT%H%M%S")
 
 # Read in local course-specific values for $courseserver, $coursepath, $cookie, $users, $problems etc
-. ~/config/edx-tools/config
+config=~/config/edx-tools/config
+. $config  ||  echo First you need to create $config, based on config-example
 
-# Gather latest progress reports for each userid
+# Gather latest progress reports for each userid, via urls like:
+#  https://edge.edx.org/courses/BerkeleyX/CS188x-17/2013_T3/progress/5020/
 for userid in $userids; do
     echo progress for userid: $userid
-    curl -s --cookie "$cookie" progress page: $courseserver/$coursepath/progress/$userid/ > progress/$userid.$ts.html
+    curl -s --cookie "$cookie" $courseserver/$coursepath/progress/$userid/ > progress/$userid.$ts.html
 done
 
 # Note: need to add command-line arguments and option testing here (or just change false to true....)
