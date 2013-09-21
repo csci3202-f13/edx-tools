@@ -22,7 +22,7 @@ if [ "$do_progress" = "yes" ]; then
 
     for userid in $userids; do
         echo progress for userid: $userid
-	    curl -k -s --cookie "$cookie" $courseserver/$coursepath/progress/$userid/ > progress/$userid.$ts.html
+	    curl -s --cookie "$cookie" $courseserver/$coursepath/progress/$userid/ > progress/$userid.$ts.html
     done
 fi
 
