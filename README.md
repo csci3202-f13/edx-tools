@@ -11,12 +11,10 @@ Current directories include:
  - analytics (tools relevant to research and analysis of edX)
  - captions (for tools related to captions)
  - logging (for tools related to logging)
+ - progress (tools for detailed student progress reporting)
  - transcoding (tools to assist with transcoding of videos on AWS)
  - branch-drift (tools related to github and difference between branches and master)
 
  You could imagine a scenario where something that starts out used informally from this
  repo eventually gets adopted into the edx-platform repo.  But not everything will have to
  go that route.
-
- 
-
