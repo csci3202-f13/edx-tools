@@ -140,7 +140,7 @@ def write_progress_csv(src_dir, dest_dir=None):
                 line, keys, possible_points = _scores(progress_file, gather_keys)
                 gather_keys = False
             else:
-                line = scores(progress_file)
+                line = _scores(progress_file)
             lines.append(line)
     _write_csv(lines, keys, possible_points, dest_dir)
     print 'finished!'
