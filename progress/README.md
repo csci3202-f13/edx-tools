@@ -9,6 +9,12 @@ Install these packages: python-simplejson ca-certificates python-beautifulsoup
     sudo apt-get -t precise-backports install ipython ipython-notebook ipython-qtconsole
     sudo apt-get install python-beautifulsoup python-simplejson ca-certificates
 
+In order to run curl securely, you will need a certificate bundle. On OSX, you may need to
+add this manually because the Apple version of curl doesn't ship with the CA cert bundle.
+See this link for details: http://curl.haxx.se/docs/caextract.html. One way to
+get the bundle on OSX is to download the .pem file from <a href="http://curl.haxx.se/docs/caextract.html">here</a>
+and set the environment variable CURL_CA_BUNDLE to the path to this file.
+
 Usage
 
 * First set up your course config file in ~/config/edx-tools/config  using supplied template

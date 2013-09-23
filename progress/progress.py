@@ -23,13 +23,14 @@ def _scores(progress_file, gather_keys=False):
 
     # get tooltip json and parse out useful values
     tooltips_matches = tooltips_pattern.findall(pd)
-    tooltips = simplejson.loads(tooltips_matches[0])
-    hw_avg = percent_score_pattern.findall(tooltips['Homework'][-1])[0]
-    proj_avg = percent_score_pattern.findall(tooltips['Project'][-1])[0]
-    final = percent_score_pattern.findall(tooltips['Final'][0])[0]
-    mt1 = percent_score_pattern.findall(tooltips['Midterm 1'][0])[0]
-    mt2 = percent_score_pattern.findall(tooltips['Midterm 2'][0])[0]
-    piazza = percent_score_pattern.findall(tooltips['Piazza participation'][0])[0]
+    if tooltips_matches:
+        tooltips = simplejson.loads(tooltips_matches[0])
+        hw_avg = percent_score_pattern.findall(tooltips['Homework'][-1])[0]
+        proj_avg = percent_score_pattern.findall(tooltips['Project'][-1])[0]
+        final = percent_score_pattern.findall(tooltips['Final'][0])[0]
+        mt1 = percent_score_pattern.findall(tooltips['Midterm 1'][0])[0]
+        mt2 = percent_score_pattern.findall(tooltips['Midterm 2'][0])[0]
+        piazza = percent_score_pattern.findall(tooltips['Piazza participation'][0])[0]
 
     # get name and email from html parse
     soup = BeautifulSoup(pd)
@@ -106,6 +107,8 @@ def _write_csv(lines, headers, possible_points, dest_dir=None):
     """
     ts = time.strftime('%Y%m%dT%H%M%S', time.localtime())
     if dest_dir:
+        if not os.path.isdir(os.path.join(os.getcwd()), dest_dir)):
+            os.mkdir(os.path.join(os.getcwd()), dest_dir))
         csv_name = os.path.abspath('{}/csv-{}.csv'.format(dest_dir, ts))
         print 'writing csv file {}'.format(csv_name)
     else:
