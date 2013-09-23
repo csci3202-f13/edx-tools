@@ -3,9 +3,11 @@
 Requirements
 
 This was developed on Ubuntu Precise 12.04
-Install these packages:
-  ipython 0.13 (from backports)
-  python-simplejson package
+Install these packages: python-simplejson ca-certificates python-beautifulsoup
+  and ipython-notebook version 0.13 (from backports) via e.g. these commands for Ubuntu Precise 12.04:
+
+    sudo apt-get -t precise-backports install ipython ipython-notebook ipython-qtconsole
+    sudo apt-get install python-beautifulsoup python-simplejson ca-certificates
 
 Usage
 
