@@ -107,8 +107,9 @@ def _write_csv(lines, headers, possible_points, dest_dir=None):
     """
     ts = time.strftime('%Y%m%dT%H%M%S', time.localtime())
     if dest_dir:
-        if not os.path.isdir(os.path.join(os.getcwd()), dest_dir)):
-            os.mkdir(os.path.join(os.getcwd()), dest_dir))
+        dest = os.path.join(os.getcwd(), dest_dir)
+        if not os.path.isdir(dest):
+            os.mkdir(dest_dir)
         csv_name = os.path.abspath('{}/csv-{}.csv'.format(dest_dir, ts))
         print 'writing csv file {}'.format(csv_name)
     else:
