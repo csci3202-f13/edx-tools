@@ -19,11 +19,11 @@ config=~/config/edx-tools/config
 #  https://edge.edx.org/courses/BerkeleyX/CS188x-17/2013_T3/progress/5020/
 if [ "$do_progress" = "yes" ]; then
     mkdir -p progress
-
     for userid in $userids; do
         echo progress for userid: $userid
 	    curl -s --cookie "$cookie" $courseserver/$coursepath/progress/$userid/ > progress/$userid.$ts.html
     done
+    echo 'done'
 fi
 
 # Note: need to add command-line arguments and option testing here (or just change false to true....)

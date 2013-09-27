@@ -12,6 +12,13 @@ tooltips_pattern = re.compile("var detail_tooltips = ([^;]*);")
 percent_score_pattern = re.compile("([0-9]+)%")
 score_pattern = re.compile("([0-9]+) of ([0-9]+)")
 
+def shorten_col_name(s):
+    s = s.replace(' ', '_')
+    s = s.replace('Homework', 'HW')
+    s = s.replace('Project', 'PROJ')
+    s = s.replace('Lecture', 'LECT')
+    return s
+
 def _scores(progress_file, gather_keys=False):
     """Return a dictionary of values for the csv headers from html progress page.
 
@@ -39,7 +46,7 @@ def _scores(progress_file, gather_keys=False):
     email = email_pattern.findall(user)[0]
 
     # intialize dict with values obtained so far
-    d = {'Name': name, 'Email': email, 'HW Avg': hw_avg, 'Proj Avg': proj_avg,
+    d = {'Name': name, 'Email': email, 'HW_AVG': hw_avg, 'PROJ_AVG': proj_avg,
          'Piazza': piazza, 'Midterm1': mt1, 'Midterm2': mt2, 'Final': final}
 
     # on the first run through, make a list of keys for maintaining the
@@ -72,20 +79,22 @@ def _scores(progress_file, gather_keys=False):
                         key = parent_text
                     if 'continued' in parent_text:
                         key += '-2'
+                    key = shorten_col_name(key)
                     d[key] = points
                     if gather_keys:
                         keys.append(key)
                         possible_points_list.append(possible)
                     problems = s.findAll('li')
                     for i, p in enumerate(problems):
-                        problem_key = ': '.join([key, 'P{}'.format(i + 1)])
+                        problem_key = ':'.join([key, 'P{}'.format(i + 1)])
                         points, possible = p.getText().split('/')
+                        problem_key = shorten_col_name(problem_key)
                         d[problem_key] = points
                         if gather_keys:
                             problem_keys.append(problem_key)
                             prob_possible_points_list.append(possible)
     if gather_keys:
-        keys += ['HW Avg', 'Proj Avg', 'Piazza', 'Midterm1', 'Midterm2', 'Final']
+        keys += ['HW_AVG', 'PROJ_AVG', 'Piazza', 'Midterm1', 'Midterm2', 'Final']
         keys += problem_keys
         possible_points_list += ['100' for i in range(6)]
         possible_points_list += prob_possible_points_list
@@ -117,11 +126,17 @@ def _write_csv(lines, headers, possible_points, dest_dir=None):
         print 'writing csv file {} to {}'.format(csv_name, os.getcwd())
     with open(csv_name, 'w') as f:
         f.write(','.join(headers) + '\n')
-        f.write(','.join(possible_points) + '\n')
+
+        # uncomment the next line to have the second row be the possible points for each category
+        # f.write(','.join(possible_points) + '\n')
         for line_dict in lines:
             f.write(','.join([line_dict[header] if header in line_dict else 'Not Found' for header in headers]) + '\n')
+    if dest_dir:
+        return csv_name
+    else:
+        return os.path.join(os.getcwd(), csv_name)
 
-def write_progress_csv(src_dir, dest_dir=None):
+def write_progress_csv(src_dir, dest_dir=None, verbose=False):
     """Write a csv file named csv-<timestamp>.
 
     Args:
@@ -138,7 +153,8 @@ def write_progress_csv(src_dir, dest_dir=None):
             if name.startswith('.'):
                 # don't look at hidden files, in particular .DS_Store on Mac
                 continue
-            print 'reading file {}'.format(name)
+            if verbose:
+                print 'reading file {}'.format(name)
             progress_file = open(os.path.join(root, name))
             if gather_keys:
                 line, keys, possible_points = _scores(progress_file, gather_keys)
@@ -146,5 +162,7 @@ def write_progress_csv(src_dir, dest_dir=None):
             else:
                 line = _scores(progress_file)
             lines.append(line)
-    _write_csv(lines, keys, possible_points, dest_dir)
-    print 'finished!'
+    csv = _write_csv(lines, keys, possible_points, dest_dir)
+    if verbose:
+        print 'finished!'
+    return csv
