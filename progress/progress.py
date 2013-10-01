@@ -18,7 +18,7 @@ def shorten_col_name(s):
     s = s.replace('Project', 'P')
     s = s.replace('Lecture', 'L')
     s = s.replace('Midterm', 'M')
-    s = s.replace(':PracticeTest', '-')
+    s = s.replace(':PracticeTest', '_')
     return s
 
 def _scores(progress_file, gather_keys=False):
@@ -78,11 +78,11 @@ def _scores(progress_file, gather_keys=False):
                     if 'Midterm' not in parent_text:
                         key = parent_text.split(':')[0]
                         if 'practice' in parent_text:
-                            key += '(PR)'
+                            key += 'L'
                     else:
                         key = parent_text
                     if 'continued' in parent_text:
-                        key += '-2'
+                        key += '_2'
                     key = shorten_col_name(key)
                     d[key] = points
                     if gather_keys:
