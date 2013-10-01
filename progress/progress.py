@@ -13,10 +13,12 @@ percent_score_pattern = re.compile("([0-9]+)%")
 score_pattern = re.compile("([0-9]+) of ([0-9]+)")
 
 def shorten_col_name(s):
-    s = s.replace(' ', '_')
-    s = s.replace('Homework', 'HW')
-    s = s.replace('Project', 'PROJ')
-    s = s.replace('Lecture', 'LECT')
+    s = s.replace(' ', '')
+    s = s.replace('Homework', 'H')
+    s = s.replace('Project', 'P')
+    s = s.replace('Lecture', 'L')
+    s = s.replace('Midterm', 'M')
+    s = s.replace(':PracticeTest', '-')
     return s
 
 def _scores(progress_file, gather_keys=False):
@@ -46,8 +48,8 @@ def _scores(progress_file, gather_keys=False):
     email = email_pattern.findall(user)[0]
 
     # intialize dict with values obtained so far
-    d = {'Name': name, 'Email': email, 'HW_AVG': hw_avg, 'PROJ_AVG': proj_avg,
-         'Piazza': piazza, 'Midterm1': mt1, 'Midterm2': mt2, 'Final': final}
+    d = {'Name': name, 'Email': email, 'H_AVG': hw_avg, 'P_AVG': proj_avg,
+         'PIAZ': piazza, 'MT1': mt1, 'MT2': mt2, 'FIN': final}
 
     # on the first run through, make a list of keys for maintaining the
     # same order when creating the csv
@@ -71,10 +73,12 @@ def _scores(progress_file, gather_keys=False):
                 # practice scores and the math assessment scores are not collected
                 # because they appeared to be inconsistent across different students,
                 # and less useful
-                if 'practice' not in parent_text and 'Math' not in parent_text:
+                if 'Math' not in parent_text:
                     points, possible = score_pattern.findall(child_text)[0]
                     if 'Midterm' not in parent_text:
                         key = parent_text.split(':')[0]
+                        if 'practice' in parent_text:
+                            key += '(PR)'
                     else:
                         key = parent_text
                     if 'continued' in parent_text:
@@ -86,7 +90,7 @@ def _scores(progress_file, gather_keys=False):
                         possible_points_list.append(possible)
                     problems = s.findAll('li')
                     for i, p in enumerate(problems):
-                        problem_key = ':'.join([key, 'P{}'.format(i + 1)])
+                        problem_key = ''.join([key, 'p{}'.format(i + 1)])
                         points, possible = p.getText().split('/')
                         problem_key = shorten_col_name(problem_key)
                         d[problem_key] = points
@@ -94,7 +98,7 @@ def _scores(progress_file, gather_keys=False):
                             problem_keys.append(problem_key)
                             prob_possible_points_list.append(possible)
     if gather_keys:
-        keys += ['HW_AVG', 'PROJ_AVG', 'Piazza', 'Midterm1', 'Midterm2', 'Final']
+        keys += ['H_AVG', 'P_AVG', 'PIAZ', 'MT1', 'MT2', 'FIN']
         keys += problem_keys
         possible_points_list += ['100' for i in range(6)]
         possible_points_list += prob_possible_points_list
