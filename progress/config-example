@@ -6,7 +6,8 @@ cookie="AWSELB=....; current_player_mode=html5; ...... NRAGENT=tk=..."
 
 # Specify bits of the the URL that you use to get to the course as an Instructor
 courseserver=https://edge.edx.org/courses
-coursepath=BerkeleyX/CS188x-17/2013_T3
+coursepath=BerkeleyX/CS188x-17
+course=2013_T3
 
 # Get student/user info from the Instructor tab, "Dump list of enrolled students"
 userids="5020 5519"

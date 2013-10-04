@@ -6,8 +6,14 @@
 #  Add test cases
 
 # Default is to just get the progress reports
-do_progress=${do_progress:-"yes"}
-do_detail=${do_detail:-"no"}
+
+if [ x"$1" = x"-d" ]; then
+   do_progress=no
+   do_detail=yes
+else
+   do_progress=yes
+   do_detail=no
+fi
 
 ts=$(date "+%Y%m%dT%H%M%S")
 
@@ -21,7 +27,7 @@ if [ "$do_progress" = "yes" ]; then
     mkdir -p progress
     for userid in $userids; do
         echo progress for userid: $userid
-	    curl -s --cookie "$cookie" $courseserver/$coursepath/progress/$userid/ > progress/$userid.$ts.html
+	    curl -s --cookie "$cookie" $courseserver/$coursepath/$course/progress/$userid/ > progress/$userid.$ts.html
     done
     echo 'done'
 fi
@@ -33,7 +39,7 @@ if [ "$do_detail" = "yes" ]; then
     mkdir -p $problem
     for username in $users; do
       echo problem: $problem user: $username
-      curl -s --cookie "$cookie" $courseserver/$coursepath/submission_history/$username/i4x://$coursepath/problem/$problem > $problem/$username.$ts.html
+      curl -s --cookie "$cookie" $courseserver/$coursepath/$course/submission_history/$username/i4x://$coursepath/problem/$problem > $problem/$username.$ts.html
     done
   done
 fi
