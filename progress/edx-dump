@@ -17,17 +17,19 @@ fi
 
 ts=$(date "+%Y%m%dT%H%M%S")
 
-# Read in local course-specific values for $courseserver, $coursepath, $cookie, $users, $problems etc
+# Read in local course-specific values for $urlbase, $organization, $course_number, $course_name, $cookie, $users, $problems etc.
 config=~/config/edx-tools/config
 . $config  ||  echo First you need to create $config, based on config-example
 
 # Gather latest progress reports for each userid, via urls like:
 #  https://edge.edx.org/courses/BerkeleyX/CS188x-17/2013_T3/progress/5020/
+#  i.e.  /courses/[organization]/[course_number]/[course_name]/
+
 if [ "$do_progress" = "yes" ]; then
     mkdir -p progress
     for userid in $userids; do
         echo progress for userid: $userid
-	    curl -s --cookie "$cookie" $courseserver/$coursepath/$course/progress/$userid/ > progress/$userid.$ts.html
+	    curl -s --cookie "$cookie" $urlbase/$organization/$course_number/$course_name/progress/$userid/ > progress/$userid.$ts.html
     done
     echo 'done'
 fi
@@ -39,7 +41,7 @@ if [ "$do_detail" = "yes" ]; then
     mkdir -p $problem
     for username in $users; do
       echo problem: $problem user: $username
-      curl -s --cookie "$cookie" $courseserver/$coursepath/$course/submission_history/$username/i4x://$coursepath/problem/$problem > $problem/$username.$ts.html
+      curl -s --cookie "$cookie" $urlbase/$organization/$course_number/$course_name/submission_history/$username/i4x://$organization/$course_number/problem/$problem > $problem/$username.$ts.html
     done
   done
 fi
