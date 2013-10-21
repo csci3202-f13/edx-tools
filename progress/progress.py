@@ -65,7 +65,7 @@ def _scores(progress_file, gather_keys=False):
                     points, possible = score_pattern.findall(child_text)[0]
                     if 'Midterm' not in parent_text:
                         key = parent_text.split(':')[0]
-                        if 'practice' in parent_text:
+                        if 'practice' in parent_text or 'make-up' in parent_text:
                             key += 'L'
                     else:
                         key = parent_text
