@@ -1,4 +1,9 @@
 # Gather data on student progress by scraping edX course site as an instructor
+# Usage: edx-dump [-d]
+# By default it downloads progress reports for all users specified in the config file and puts them in the "progress" directory
+# The -d  option gets detailed submission histories on the problems specified in the config file, rather than progress reports
+# and puts them in directories named after the problem.
+# For more info for debugging, use   bash -x ./edx-dump
 
 # TODO:
 #  Add options for setting $do_progress and $do_detail.  Currently just gets progress report, but could get detailed submission history
