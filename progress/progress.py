@@ -8,7 +8,7 @@ from BeautifulSoup import BeautifulSoup
 name_pattern = re.compile("'(.*)'")
 email_pattern = re.compile("\((.*)\)")
 ending_number_pattern = re.compile("\d+-(\d+)$")
-tooltips_pattern = re.compile("var detail_tooltips = ([^;]*);")
+# tooltips_pattern = re.compile("var detail_tooltips = ([^;]*);")
 percent_score_pattern = re.compile("([0-9]+)%")
 score_pattern = re.compile("([0-9]+) of ([0-9]+)")
 
@@ -30,17 +30,6 @@ def _scores(progress_file, gather_keys=False):
 
     pd = progress_file.read()
 
-    # get tooltip json and parse out useful values
-    tooltips_matches = tooltips_pattern.findall(pd)
-    if tooltips_matches:
-        tooltips = simplejson.loads(tooltips_matches[0])
-        hw_avg = percent_score_pattern.findall(tooltips['Homework'][-1])[0]
-        proj_avg = percent_score_pattern.findall(tooltips['Project'][-1])[0]
-        final = percent_score_pattern.findall(tooltips['Final'][0])[0]
-        mt1 = percent_score_pattern.findall(tooltips['Midterm 1'][0])[0]
-        mt2 = percent_score_pattern.findall(tooltips['Midterm 2'][0])[0]
-        piazza = percent_score_pattern.findall(tooltips['Piazza participation'][0])[0]
-
     # get name and email from html parse
     soup = BeautifulSoup(pd)
     user = soup.findAll('header')[1].getText()
@@ -48,8 +37,7 @@ def _scores(progress_file, gather_keys=False):
     email = email_pattern.findall(user)[0]
 
     # intialize dict with values obtained so far
-    d = {'Name': name, 'Email': email, 'H_AVG': hw_avg, 'P_AVG': proj_avg,
-         'PIAZ': piazza, 'MT1': mt1, 'MT2': mt2, 'FIN': final}
+    d = {'Name': name, 'Email': email}
 
     # on the first run through, make a list of keys for maintaining the
     # same order when creating the csv
@@ -77,7 +65,7 @@ def _scores(progress_file, gather_keys=False):
                     points, possible = score_pattern.findall(child_text)[0]
                     if 'Midterm' not in parent_text:
                         key = parent_text.split(':')[0]
-                        if 'practice' in parent_text:
+                        if 'practice' in parent_text or 'make-up' in parent_text:
                             key += 'L'
                     else:
                         key = parent_text
@@ -98,9 +86,7 @@ def _scores(progress_file, gather_keys=False):
                             problem_keys.append(problem_key)
                             prob_possible_points_list.append(possible)
     if gather_keys:
-        keys += ['H_AVG', 'P_AVG', 'PIAZ', 'MT1', 'MT2', 'FIN']
         keys += problem_keys
-        possible_points_list += ['100' for i in range(6)]
         possible_points_list += prob_possible_points_list
         return d, keys, possible_points_list
     else:
