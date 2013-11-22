@@ -1,14 +1,15 @@
 #!/usr/bin/python
-"""Nodes: dump the nodes in an edX course, including the tag, id (hash) and name.
-
-TODO:
+"""Nodes: print a heirarchical list of the nodes in an edX course, including the tag, id (hash) and name.
 
 %InsertOptionParserUsage%
 
 Example:
- nodes.py 2013_T3   # parses at course/2013_T3.xml
+ nodes.py directory 2013_T3   # parses directory/course/2013_T3.xml
 
-Sample:
+TODO:
+figure out course_name on our own.
+
+Sample xml file contents:
 
 <vertical display_name="p1_search_q8_replanning">
   <html url_name="198b1913bbf74ee1a92345cd0e089d70"/>
@@ -29,7 +30,7 @@ __date__ = "2013-10-14"
 __copyright__ = "Copyright (c) 2013 Neal McBurnett"
 __license__ = "GPL v3"
 
-parser = OptionParser(prog="nodes.py", version=__version__)
+parser = OptionParser(prog="nodes.py", version=__version__, usage = "Usage: %prog [options] directory course_name")
 
 parser.add_option("-d", "--debuglevel",
   type="int", default=logging.WARNING,
@@ -78,6 +79,7 @@ def main(parser):
     os.chdir(directory)
 
     r = Node('course', course_name)
+    print r
     r.getsubs()
 
 if __name__ == "__main__":
