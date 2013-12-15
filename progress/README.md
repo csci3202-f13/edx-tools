@@ -1,4 +1,4 @@
-# Gather data on student progress by scraping edX course site as an instructor
+## Gather data on student progress by scraping edX course site as an instructor
 
 Requirements
 
@@ -24,15 +24,15 @@ Usage
 Sample results are in the tests directory.
 
 
-# submission.py: View results for individual submissions
+## submission.py: View results for individual submissions
 
 This script uses the requests module to get json data from edx for student submissions.
 
-## Additional requirements
+### Additional requirements
 
 python-requests
 
-## Setup
+### Setup
 
 Fill in the following fields in config.py. Examples are shown in the file. Make sure that the same order is used in every list, so that the usernames, userids, sids, and emails all refer to the same student for every list index.
 
@@ -46,7 +46,7 @@ Fill in the following fields in config.py. Examples are shown in the file. Make 
 
 You will need your edx cookies again. Create a text file in the ~/config/edx-tools/config directory called cookies.txt. Open up the chrome debugger and copy/paste your edx cookies directly into that file. No other changes are needed, submission.py will parse the cookies for you.
 
-## Usage
+### Usage
 
 In edx, every problem that accepts submissions has an associated hex string as an identifier.
 To use submission.py to get all student submissions for a given problem, use:
@@ -67,7 +67,7 @@ To get days past due date, use -t [due date]. The due date must be in the form [
 
 submission.py can also be used to moderate in-class "clicker" questions. Use the -c option if you want to get data from an in-class problem you have posted on the fly. If you want individual output for each student, use -o as well. This will print problem scores to the terminal, as well as writing a csv with student grades, called clicker_grades-[problem].csv by default.
 
-####Examples:
+###Examples:
 
 Get data and days late for a project due on 2013-1-1 at noon, UTC. Save to my_output.csv
 ```
