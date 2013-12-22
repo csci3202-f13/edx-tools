@@ -8,6 +8,9 @@ Example:
 
 TODO:
 figure out course_name on our own.
+put node ids first, optional, easy to strip out, then indent for nesting level, then node type, optional, then name
+protect against more KeyErrors etc via use of get() rather than indexing as in 
+        self.name = self.e.attrib.get('display_name')
 
 Sample xml file contents:
 
@@ -47,7 +50,7 @@ class Node():
         self.id = id
         self.subs = []
         self.e = ET.parse(os.path.join(tag, id + ".xml")).getroot()
-        self.name = self.e.attrib['display_name']
+        self.name = self.e.attrib.get('display_name')
 
     def __str__(self):
         return("%s node %s: %s" % (self.tag, self.id, self.name))
@@ -74,7 +77,7 @@ def main(parser):
     directory = args[0]
     course_name = args[1]
 
-    logging.debug("Directory: %s, course name: %s", (directory, course_name))
+    logging.debug("Directory: %s, course name: %s" % (directory, course_name))
 
     os.chdir(directory)
 
